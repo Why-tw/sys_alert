@@ -12,10 +12,15 @@ typedef struct {
 	unsigned long steal;
 } CPU_INFO;
 
+typedef struct {
+	unsigned long MemTotal;
+} MEM_INFO;
+
 void init_cpu_info(CPU_INFO cpu_info);
 int read_cpus(CPU_INFO cpu_info[64]);
 unsigned long ul_cpu_total(const CPU_INFO *c);
 unsigned long cpu_idle(const CPU_INFO *c);
 int get_cpus_usage(double cpu_usage[64]);
+int read_mem(MEM_INFO mem_info);
 
 #endif

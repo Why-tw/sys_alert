@@ -68,4 +68,22 @@ int get_cpus_usage(double cpu_usage[64]) {
 	return ncpu2;
 }
 
-
+int read_mem(MEM_INFO mem_info) {
+	int fd = open("/proc/meminfo", O_RDONLY);			
+	if (fd < 0) {
+		perror("read /proc/meminfo");
+		return -1;
+	}
+	char buf[8192];	
+	int ret = read(fd, buf, sizeof(buf)-1);
+	if (ret < 0) {
+		perror("read");
+		return -1;
+	}
+	char *line = strtok(buf, "\n");
+	while (line) {
+		if (!strncmp(line, "MemTotal: ", 10)){
+		}			
+	}
+	return 0;
+}
