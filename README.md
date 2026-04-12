@@ -16,7 +16,7 @@ A Linux system monitoring tool written in C.
 
 ## Development Progress
 - [x] Project initialized
-- [ ] CPU usage module
+- [x] CPU usage module
 - [ ] Memory monitor
 - [ ] Process viewer
 
