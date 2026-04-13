@@ -14,13 +14,27 @@ typedef struct {
 
 typedef struct {
 	unsigned long MemTotal;
+	unsigned long MemAvailable;
+	unsigned long SwapTotal;
+	unsigned long SwapFree;
+	unsigned long Dirty;
+	unsigned long WriteBack;
 } MEM_INFO;
+
+typedef struct {
+    char Name[256];
+    char State[32];
+    int Pid;
+    int PPid;
+    int VmRSS;
+} PROC_INFO;
 
 void init_cpu_info(CPU_INFO cpu_info);
 int read_cpus(CPU_INFO cpu_info[64]);
 unsigned long ul_cpu_total(const CPU_INFO *c);
 unsigned long cpu_idle(const CPU_INFO *c);
 int get_cpus_usage(double cpu_usage[64]);
-int read_mem(MEM_INFO mem_info);
+int read_mem(MEM_INFO *mem_info);
+int read_process(PROC_INFO proc_info[1000]);
 
 #endif

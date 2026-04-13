@@ -5,9 +5,9 @@
 A Linux system monitoring tool written in C.
 
 ## Features
-- [ ] CPU usage monitoring
-- [ ] Memory tracking
-- [ ] Process viewer
+- [x] CPU usage monitoring
+- [x] Memory tracking
+- [x] Process viewer
 
 ## Goals
 - Learn how Linux system information works using `/proc`
@@ -17,8 +17,8 @@ A Linux system monitoring tool written in C.
 ## Development Progress
 - [x] Project initialized
 - [x] CPU usage module
-- [ ] Memory monitor
-- [ ] Process viewer
+- [x] Memory monitor
+- [x] Process viewer
 
 ## Tech Stack
 - Language: C
@@ -28,4 +28,7 @@ A Linux system monitoring tool written in C.
 ## Future Plans
 - Add real-time updates
 - Improve output formatting (CLI UI)
-- Possibly implement a `top`-like interface
+- Possibly implement a `top`-like TUI interface
+
+## How to test
+use `gcc main.c system.c -o sys_alert` to display some examples
