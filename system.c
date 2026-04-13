@@ -163,5 +163,5 @@ int read_process(PROC_INFO proc_info[1000]) {
             idx ++;
         }
     }
-    return 0;
+    return idx-1;
 }
