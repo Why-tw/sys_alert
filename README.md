@@ -62,15 +62,3 @@ Future improvements may include:
 * Sorting and filtering processes
 * Better UI (ncurses)
 * Alerts for high resource usage
-
----
-
-## 📷 Demo (optional)
-
-*Add a screenshot or terminal recording here*
-
----
-
-## 📄 License
-
-MIT (or your choice)
