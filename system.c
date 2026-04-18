@@ -55,27 +55,30 @@ unsigned long cpu_idle(const CPU_INFO *c) {
     return c->idle + c->iowait;
 }
 
-int get_cpus_usage(double cpu_usage[64]) {
-    CPU_INFO prev[64], curr[64];
-    int ncpu1 = read_cpus(prev);
-    sleep(1);
-    int ncpu2 = read_cpus(curr);
-	if (ncpu2 < 0) return -1;
-	if (ncpu2 < ncpu1) ncpu1 = ncpu2;
-    for (int i = 0; i < ncpu1; i++) {
-        unsigned long total1 = ul_cpu_total(&prev[i]);
-        unsigned long total2 = ul_cpu_total(&curr[i]);
-        unsigned long idle1 = cpu_idle(&prev[i]);
-        unsigned long idle2 = cpu_idle(&curr[i]);
-        unsigned long delta_total = total2 - total1;
-        unsigned long delta_idle  = idle2 - idle1;
-        if (delta_total == 0) {
+int calc_cpu_usage(int ncpu, CPU_INFO old_cpu_info[1000], CPU_INFO new_cpu_info[1000], double cpu_usage[1000]) {
+    for (int i = 0; i < ncpu; i ++) {
+        unsigned long old_total = ul_cpu_total(&old_cpu_info[i]);
+        unsigned long new_total = ul_cpu_total(&new_cpu_info[i]);
+
+        unsigned long total_delta = new_total - old_total;
+
+        unsigned long old_idle = cpu_idle(&old_cpu_info[i]);
+        unsigned long new_idle = cpu_idle(&new_cpu_info[i]);
+
+        unsigned long idle_delta = new_idle - old_idle;
+        // avoid something devided by zero and error
+        if (total_delta == 0) {
             cpu_usage[i] = 0.0;
-        } else {
-            cpu_usage[i] = 100.0 * (delta_total - delta_idle) / delta_total;
+        }
+        else if (total_delta < 0) {
+            perror("new total smaller than old total");
+            return -1;
+        }
+        else {
+            cpu_usage[i] = 100.0 * (total_delta - idle_delta) / total_delta;
         }
     }
-	return ncpu2;
+    return 0;
 }
 
 int read_mem(MEM_INFO *mem_info) {
@@ -163,5 +166,5 @@ int read_process(PROC_INFO proc_info[1000]) {
             idx ++;
         }
     }
-    return idx-1;
+    return idx;
 }

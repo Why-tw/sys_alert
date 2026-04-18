@@ -29,11 +29,10 @@ typedef struct {
     int VmRSS;
 } PROC_INFO;
 
-void init_cpu_info(CPU_INFO cpu_info);
 int read_cpus(CPU_INFO cpu_info[64]);
 unsigned long ul_cpu_total(const CPU_INFO *c);
 unsigned long cpu_idle(const CPU_INFO *c);
-int get_cpus_usage(double cpu_usage[64]);
+int calc_cpu_usage(int ncpu, CPU_INFO old_cpu_info[1000], CPU_INFO new_cpu_info[1000], double cpu_usage[1000]);
 int read_mem(MEM_INFO *mem_info);
 int read_process(PROC_INFO proc_info[1000]);
 

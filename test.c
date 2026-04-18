@@ -5,8 +5,9 @@ int main () {
     double cpu_usage[64];
     MEM_INFO mem_info = {0};
     PROC_INFO proc_info[1000] = {0};
+	int idx = 0;
 	while (1) {
-		printf("\033[H\033[2J");
+		printf("\033[H\033[J");
 		for (int i = 0; i < 64; i ++) cpu_usage[i] = 0;
 		int ncpu = get_cpus_usage(cpu_usage);
 		for (int i = 0; i < ncpu; i ++) {
@@ -17,8 +18,10 @@ int main () {
 		read_mem(&mem_info);
 		printf("MemTotal: %lu kB\nMemAvilable: %lu kB\nSwapTotal: %lu kB\nSwapFree: %lu kB\nDirty: %lu kB\nWriteBack: %lu kB\n", mem_info.MemTotal, mem_info.MemAvailable, mem_info.SwapTotal, mem_info.SwapFree, mem_info.Dirty, mem_info.WriteBack);
 		printf("\n");
-		read_process(proc_info);
-		printf("Name: %s\nState: %s\nPid: %d\nPPid: %d\nVmRSS: %d", proc_info[0].Name, proc_info[0].State, proc_info[0].Pid, proc_info[0].PPid, proc_info[0].VmRSS);
+		int end = read_process(proc_info);
+		if (end > 0 && idx >= end) idx = 0;
+		printf("Name: %s\nState: %s\nPid: %d\nPPid: %d\nVmRSS: %d", proc_info[idx].Name, proc_info[idx].State, proc_info[idx].Pid, proc_info[idx].PPid, proc_info[idx].VmRSS);
+		idx ++;
 	}
 	return 0;
 }
