@@ -81,6 +81,13 @@ int calc_cpu_usage(int ncpu, CPU_INFO old_cpu_info[1000], CPU_INFO new_cpu_info[
     return 0;
 }
 
+void calc_mem_usage(MEM_INFO* mem_info) {
+    if (mem_info->MemTotal == 0) return;
+    mem_info->MemUsage =
+        100.0 * (mem_info->MemTotal - mem_info->MemAvailable)
+        / mem_info->MemTotal;
+}
+
 int read_mem(MEM_INFO *mem_info) {
 	int fd = open("/proc/meminfo", O_RDONLY);
 	if (fd < 0) {
@@ -116,8 +123,10 @@ int read_mem(MEM_INFO *mem_info) {
 		else if (!strncmp(line, "WriteBack:", 10)) {
 		    sscanf(line, "%*s %lu kB", &mem_info->WriteBack);
 		}
+
 		line = strtok(NULL, "\n");
 	}
+	calc_mem_usage(mem_info);
 	return 0;
 }
 

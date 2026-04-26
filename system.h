@@ -13,6 +13,7 @@ typedef struct {
 } CPU_INFO;
 
 typedef struct {
+    double MemUsage;
 	unsigned long MemTotal;
 	unsigned long MemAvailable;
 	unsigned long SwapTotal;
@@ -28,6 +29,17 @@ typedef struct {
     int PPid;
     int VmRSS;
 } PROC_INFO;
+
+typedef struct {
+    char name[100];
+    int status;
+    double val;
+} ERROR_INFO;
+
+typedef struct {
+    int cpu_usage_limit;
+    int mem_usage_limit;
+} SETTING;
 
 int read_cpus(CPU_INFO cpu_info[64]);
 unsigned long ul_cpu_total(const CPU_INFO *c);

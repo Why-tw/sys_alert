@@ -11,7 +11,7 @@ typedef enum {
 } Screen;
 
 void clear_windows(void);
-void draw_home(void);
+void draw_home(ERROR_INFO[], int n);
 void draw_cpu(double cpu_usage[64], int ncpu);
 void draw_mem(MEM_INFO mem_info);
 void draw_proc(PROC_INFO proc_info[1000]);
