@@ -1,35 +1,53 @@
-#include "ui.h"
-#include <stdio.h>
-#include "system.h"
+#include "include/ui.h"
+#include "include/types.h"
+#include <ncurses.h>
 
-
-void clear_windows(void) {
-    printf("\033[H\033[J");
-}
-
-void draw_home(ERROR_INFO error_info[10], int n) {
-    printf("[1] HOME [2] CPU [3] PROC [4] MEM [q] QUIT\n\n");
-    printf("ERRORS: \n\n");
-    for (int i = 0; i < n; i ++) {
-        if (error_info[i].status == 1) printf("\033[32m%s%.2f%%\033[0m\n" , error_info[i].name, error_info[i].val);
-        else if (error_info[i].status == 2) printf("\033[33m%s%.2f%%\033[0m\n" , error_info[i].name, error_info[i].val);
-        else if (error_info[i].status == 3) printf("\033[31m%s%.2f%%\033[0m\n" , error_info[i].name, error_info[i].val);
+void display_home(ALERT_STATE cpu_alert_state[], int ncpus) {
+    printw("[1] Home \t[2] CPU \t[3]MEM \t\t [q]Quit\n\n");
+    printw("ERROR:\n");
+    for (int i = 0; i < ncpus; i ++) {
+        if (cpu_alert_state[i].active == 1 && cpu_alert_state[i].duration >=3) {
+            if (i == 0) printw("Total CPU:\tusage too high\n");
+            else printw("CPU%d:\t\tusage too high\n", i);
+        }
     }
 }
 
-void draw_cpu(double cpu_usage[64], int ncpu) {
-    for (int i = 0; i < ncpu; i ++) {
-        if (i == 0) printf("CPU total: %.2f %%\n", cpu_usage[i]);
-        else printf("CPU%d: %.2f %%\n", i - 1, cpu_usage[i]);
-	}
+void display_cpu_usage(double cpu_usage[], int ncpus) {
+    printw("Cores: %d\n", ncpus-1);
+    printw("Total CPU usage: %.2f%%\n", cpu_usage[0]);
+    for (int i = 1; i < ncpus; i ++) {
+        printw("CPU%d: %.2f%%\n", i, cpu_usage[i]);
+    }
 }
 
-void draw_mem(MEM_INFO mem_info) {
-    printf("MemUsage: %2.f%%\nMemTotal: %lu kB\nMemAvilable: %lu kB\nSwapTotal: %lu kB\nSwapFree: %lu kB\nDirty: %lu kB\nWriteBack: %lu kB\n",mem_info.MemUsage, mem_info.MemTotal, mem_info.MemAvailable, mem_info.SwapTotal, mem_info.SwapFree, mem_info.Dirty, mem_info.WriteBack, mem_info.MemUsage);
+void display_mem_info(MEM_INFO mem_info, double mem_usage) {
+    printw("MemUsage: %.2f%%\n", mem_usage);
+    printw("MemTotal: %lu kb\n", mem_info.MemTotal);
+    printw("MemAvailable: %lu kb\n", mem_info.MemAvailable);
+    printw("MemFree: %lu kb\n", mem_info.MemFree);
+    printw("Dirty: %lu kb\n", mem_info.Dirty);
 }
 
-void draw_proc(PROC_INFO proc_info[1000]) {
-    for (int idx = 0; idx < 5; idx ++) {
-        printf("Name: %s\nState: %s\nPid: %d\nPPid: %d\nVmRSS: %d\n", proc_info[idx].Name, proc_info[idx].State, proc_info[idx].Pid, proc_info[idx].PPid, proc_info[idx].VmRSS);
+void test_cpu_info(CPU_INFO cpu_info[], int ncpus) {
+    printw("Cores: %d\n", ncpus-1);
+    printw("Total CPU: %lu\n", cpu_info[0].user);
+    for (int i = 1; i < ncpus; i ++) {
+        printw("CPU%d: %lu\n",i , cpu_info[i].user);
+    }
+}
+
+void test_mem_info(MEM_INFO mem_info) {
+    printw("MemTotal: %lu kb\n", mem_info.MemTotal);
+    printw("MemAvailable: %lu kb\n", mem_info.MemAvailable);
+    printw("MemFree: %lu kb\n", mem_info.MemFree);
+    printw("Dirty: %lu kb\n", mem_info.Dirty);
+}
+
+void test_cpu_alert_system(ALERT_STATE cpu_alert_state[], int ncpus) {
+    printw("NAME\t\tACTIVE\t\tDURATION\n");
+    printw("Total CPU\t%d\t\t%d\n", cpu_alert_state[0].active, cpu_alert_state[0].duration);
+    for (int i = 1; i < ncpus; i ++) {
+        printw("CPU%d\t\t%d\t\t%d\n", i, cpu_alert_state[i].active, cpu_alert_state[i].duration);
     }
 }
